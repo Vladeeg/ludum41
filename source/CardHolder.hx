@@ -9,6 +9,7 @@ import flixel.tweens.FlxTween;
 
 class CardHolder extends FlxTypedGroup<Card>
 {
+	var vOffset: Float;
 	
 	public var delay:Int;
 	private var canClick:Bool;
@@ -17,6 +18,7 @@ class CardHolder extends FlxTypedGroup<Card>
 	
 	public function new() 
 	{
+		vOffset = FlxG.height * 0.5;
 		super();
 		canHover = true;
 		FlxMouseEventManager.init();
@@ -37,7 +39,9 @@ class CardHolder extends FlxTypedGroup<Card>
 			var pos = c.x - (FlxG.width - Card.WIDTH) * 0.5;
 			//c.angle = pos * Math.PI / 80;
 			FlxTween.angle(c, c.angle, pos * Math.PI / 80, 0.2);
-			FlxTween.tween(card, {y: 400 + Math.sqrt(Math.abs(pos)) * 2}, 0.5);
+			// c.y = (2 * FlxG.width) / 16 + pos * pos / (2 * FlxG.width);
+			// FlxTween.tween(card, {y: 400 + Math.sqrt(Math.abs(pos)) * 2}, 0.5);
+			FlxTween.tween(card, {y: vOffset + (2 * FlxG.width) / 16 + pos * pos / (2 * FlxG.width)}, 0.5);
 			//card.y= 400 + Math.sqrt(Math.abs(pos)) * 2;
 		});
 	}
@@ -54,7 +58,8 @@ class CardHolder extends FlxTypedGroup<Card>
 	private function onMouseOut(card:Card)
 	{
 		var pos = card.x - (FlxG.width - Card.WIDTH) * 0.5;
-		FlxTween.tween(card, {y: 400 + Math.sqrt(Math.abs(pos)) * 2}, 0.1);
+		// FlxTween.tween(card, {y: 400 + Math.sqrt(Math.abs(pos)) * 2}, 0.1);
+		FlxTween.tween(card, {y: vOffset + (2 * FlxG.width) / 16 + pos * pos / (2 * FlxG.width)}, 0.1);
 		//card.y = 400 + Math.sqrt(Math.abs(pos)) * 2;
 	}
 	
@@ -124,7 +129,8 @@ class CardHolder extends FlxTypedGroup<Card>
 			var pos = c.x - (FlxG.width - Card.WIDTH) * 0.5;
 			c.angle = pos * Math.PI / 80;
 			//c.y = 400 + Math.sqrt(Math.abs(pos)) * 2;
-			FlxTween.tween(c, {y: 400 + Math.sqrt(Math.abs(pos)) * 2}, 0.5);
+			// FlxTween.tween(c, {y: 400 + Math.sqrt(Math.abs(pos)) * 2}, 0.5);
+			FlxTween.tween(c, {y: vOffset + (2 * FlxG.width) / 16 + pos * pos / (2 * FlxG.width)}, 0.5);
 		});
 	}
 	
@@ -139,7 +145,8 @@ class CardHolder extends FlxTypedGroup<Card>
 		{
 			var pos = c.x - (FlxG.width - Card.WIDTH) * 0.5;
 			c.angle = pos * Math.PI / 80;
-			c.y = 400 + Math.sqrt(Math.abs(pos)) * 2;
+			// c.y = 400 + Math.sqrt(Math.abs(pos)) * 2;
+			c.y = vOffset + (2 * FlxG.width) / 16 + pos * pos / (2 * FlxG.width);
 		});
 	}
 	

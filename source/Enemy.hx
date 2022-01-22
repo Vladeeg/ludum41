@@ -1,9 +1,9 @@
 package;
 
+import openfl.Assets;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
-import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -20,12 +20,20 @@ class Enemy extends FlxSprite
 	
 	public var healthInfo:FlxText;
 	
-	
+	var effect:LightingEffect;
 	
 	public function new(X:Float=0, Y:Float=0, type:String = "slime") 
 	{
 		super(X, Y);
 		loadGraphic("assets/images/enemy_" + type + ".png", true, 250, 250);
+		var normalMap = Assets.getBitmapData("assets/images/enemy_" + type + "_n.png");
+		var specularMap = Assets.getBitmapData("assets/images/enemy_" + type + "_s.png");
+		effect = new LightingEffect(normalMap, specularMap, 250, 250);
+		effect.setLightPosition(FlxG.width - 100, 20, 20);
+		effect.setLightColor(FlxColor.ORANGE);
+		effect.setLightRadius(1000);
+		shader = effect.shader;
+		// var specularMap = Assets.getBitmapData("assets/images/enemy_face_s_sprsh.png");
 		params = new EnemiesPool();
 		
 		speed = FlxG.random.float( -20, 20);
@@ -70,6 +78,12 @@ class Enemy extends FlxSprite
 		
 		healthInfo = new FlxText(X + width * 0.5, Y - 25, 0, Std.string(health) + "/" + Std.string(health), 20);
 		healthInfo.font = "assets/fonts/10692.ttf";
+
+		animation.callback = function(name, frameNumber, frameIndex)
+		{
+			effect.setFrameUV(frame.uv.x, frame.uv.y);
+		}
+
 		animation.play("idle");
 	}
 	
@@ -133,6 +147,8 @@ class Enemy extends FlxSprite
 			animation.play("idle");
 			FlxTween.tween(this, {x: defaultPosition.x}, 0.5);
 		}
+
+		effect.setWorldPos(x, y);
 		
 		super.update(elapsed);
 	}
